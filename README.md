@@ -13,13 +13,15 @@ The development of this solution was driven by a real-world need: integrating a 
 ## The Problem
 
 Accessing `HttpOnly` cookies in Streamlit is challenging because:
+
 - **No Native Support:** Streamlit does not provide a built-in function to read `HttpOnly` cookies.
 - **Security Restrictions:** These cookies are protected from client-side scripts (JavaScript) to prevent XSS attacks, meaning standard browser-based libraries cannot access them.
 - **Integration Issues:** This becomes a problem when integrating a Streamlit app with authentication systems that rely on `HttpOnly` cookies for session management.
 
 ## The Solution
 
-This repository provides a Python-based workaround that directly accesses the initial HTTP request headers received by the Streamlit server. 
+This repository provides a Python-based workaround that directly accesses the initial HTTP request headers received by the Streamlit server.
+
 - It operates on the **server-side context** of the Streamlit application.
 - It inspects the raw `Cookie` header from the user's connection request.
 - By parsing this header, it can extract any cookie's value, bypassing the browser's client-side security restrictions.
@@ -39,7 +41,7 @@ def get_cookie_from_headers(cookie_name: str) -> str | None:
     """
     A workaround to read a cookie (including HttpOnly) from the initial request headers.
     This is compatible with the Streamlit runtime structure.
-    
+  
     Args:
         cookie_name (str): The name of the cookie to retrieve.
 
@@ -69,7 +71,7 @@ def get_cookie_from_headers(cookie_name: str) -> str | None:
 
         # Parse the cookie string to a dictionary
         cookies = httputil.parse_cookie(cookie_string)
-        
+      
         # Return the specific cookie value
         return cookies.get(cookie_name)
 
@@ -103,26 +105,27 @@ This repository includes `app.py`, a simple Streamlit application to test the fu
 
 ### How to Run the Test App
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/streamlit-cookie-httponly.git
-    cd streamlit-cookie-httponly
-    ```
+1. **Clone the repository:**
 
-2.  **Install dependencies:**
-    ```bash
-    pip install streamlit
-    ```
+   ```bash
+   git clone git@github.com:omatheusgit/streamlit-httponly-cookies.git
+   cd streamlit-httponly-cookies
+   ```
+2. **Install dependencies:**
 
-3.  **Run the app:**
-    ```bash
-    streamlit run app.py
-    ```
+   ```bash
+   pip install streamlit
+   ```
+3. **Run the app:**
 
-4.  **Test in your browser:**
-    *   Open the app in your browser.
-    *   Use your browser's developer tools or a backend service to set an `HttpOnly` cookie for the app's domain (e.g., `localhost`).
-    *   Enter the cookie's name in the input field and click "Find Cookie". The app will tell you if it found the cookie and display its value.
+   ```bash
+   streamlit run app.py
+   ```
+4. **Test in your browser:**
+
+   * Open the app in your browser.
+   * Use your browser's developer tools or a backend service to set an `HttpOnly` cookie for the app's domain (e.g., `localhost`).
+   * Enter the cookie's name in the input field and click "Find Cookie". The app will tell you if it found the cookie and display its value.
 
 ## Disclaimer
 
